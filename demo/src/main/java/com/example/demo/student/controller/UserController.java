@@ -19,35 +19,38 @@ public class UserController {
         this.service = userService;
     }
 
+    //Edits User
     @PutMapping(path = "{id}")
     public ResponseEntity<User> editUser(@PathVariable Long id, @RequestBody User user) {
         User newUser = service.editUser(id,user);
         if(newUser!=null){
             return new ResponseEntity<>(service.getUser(id), HttpStatus.OK);
         }else {
-            System.out.println("it works");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
+    //Returns all users
     @GetMapping
     public List<User> getUsers() {
         return service.getUsers();
     }
 
+    //Creates Users
     @PostMapping
     public String createUser(@RequestBody User user) {
         service.create(user);
         return "User created";
     }
 
+    //Deletes user
     @DeleteMapping(path = "{userId}")
-    public String delete(@PathVariable("userId") Long id){
+    public ResponseEntity<User> delete(@PathVariable("userId") Long id){
         int status = service.delete(id);
         if(status == 1){
-            return "User deleted";
+            return new ResponseEntity<>(HttpStatus.OK);
         }else {
-            return "User not found";
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
